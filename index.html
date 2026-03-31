@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0055)file:///Users/sruly/Downloads/caretram_homepage_20.html -->
+<!-- saved from url=(0055)file:///Users/sruly/Downloads/caretram_homepage_22.html -->
 <html lang="en" data-kantu="1"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -337,10 +337,6 @@ body.cta-active #bridge-section #bridge-para{
   color:#fff !important;
   transition:color .6s ease;
 }
-  color:#fff !important;
-  text-decoration:underline;
-  text-underline-offset:3px;
-}
 
 /* "nothing" — extra bold, dark slate color, underline */
 .nothing-word{
@@ -436,13 +432,48 @@ body.cta-active #bridge-section #bridge-para{
   .body-col{gap:64px}
   .body-col p{font-size:1.375rem}
 }
-/* ── SCROLL BACKGROUND TRANSITION ── */
+/* ── SCROLL: BRIDGE SECTION TURNS RED FULL WIDTH, CTA WHITE ── */
 body{transition:background-color .6s ease}
-body.cta-active{background:#C83E4D !important}
-body.cta-active h1,
-body.cta-active .body-col p,
-body.cta-active .logo-name,
-body.cta-active .w-notif-text{color:#fff !important;transition:color .6s ease}
+
+/* Bridge section becomes red full-width when active */
+#bridge-section{transition:background-color .6s ease, max-width .6s ease}
+body.cta-active #bridge-section{
+  background:#C83E4D !important;
+  max-width:100% !important;
+  padding:120px 60px;
+}
+/* All text inside bridge goes white */
+body.cta-active #bridge-section h2,
+body.cta-active #bridge-section p,
+body.cta-active #bridge-section #bridge-para,
+body.cta-active #bridge-section .bridge-line-1{
+  color:#fff !important;
+  transition:color .6s ease;
+}
+/* Caretram word goes white+underline */
+body.cta-active .w-caretram{
+  color:#fff !important;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+/* CTA section: white bg, black text */
+#cta-section{
+  background:#ffffff !important;
+}
+.cta-eyebrow{color:#888 !important}
+.cta-headline{color:#111 !important}
+#cta-form input{
+  background:rgba(0,0,0,.07) !important;
+  color:#111 !important;
+}
+#cta-form input::placeholder{color:rgba(0,0,0,.4) !important}
+#cta-form input:focus{background:rgba(0,0,0,.12) !important}
+#cta-btn{
+  background:#C83E4D !important;
+  color:#fff !important;
+}
+#cta-btn:hover{box-shadow:0 6px 24px rgba(200,62,77,.3) !important}
+.confirm-icon,.confirm-msg{color:#111 !important}
 /* hide the finale-block text (shown in CTA section instead) */
 .finale-eyebrow{display:none}
 
@@ -555,7 +586,7 @@ body.cta-active .w-notif-text{color:#fff !important;transition:color .6s ease}
 @media(min-width:769px){.bridge-line-1{white-space:nowrap}}
 
 #cta-section{
-  background:#C83E4D;
+  background:#ffffff;
   padding:80px 24px 100px;
   text-align:center;
   font-family:'DM Sans',sans-serif;
@@ -637,7 +668,7 @@ body.cta-active .w-notif-text{color:#fff !important;transition:color .6s ease}
 }
 </style>
 </head>
-<body class="">
+<body class="cta-active">
 
 <!-- Overlays -->
 <div id="notif-overlay"></div>
@@ -3103,7 +3134,7 @@ body.cta-active .w-notif-text{color:#fff !important;transition:color .6s ease}
 </section>
 
 <!-- BRIDGE SECTION — buffer before red CTA -->
-<section id="bridge-section" style="padding:120px 60px;max-width:1100px;margin:0 auto;text-align:center">
+<section id="bridge-section" style="padding:120px 60px;margin:0 auto;text-align:center;max-width:1100px">
   <p style="font-size:.85rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#C83E4D;margin-bottom:20px;font-family:&#39;DM Sans&#39;,sans-serif">Built for ABA. Not adapted for it.</p>
   <h2 style="font-family:&#39;DM Sans&#39;,sans-serif;font-weight:700;letter-spacing:-.03em;color:#111;line-height:1.15;margin-bottom:24px">
     <span class="bridge-line-1" style="display:block;font-size:clamp(2rem,4vw,3.2rem)">Some CRMs were built for sales teams.</span>

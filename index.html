@@ -177,6 +177,12 @@ main{padding-top:128px;padding-bottom:80px}
 
 /* ── H1 ── */
 h1{font-size:clamp(2.8rem,5.9vw,5.25rem);font-weight:700;line-height:1.2;letter-spacing:-.002em;color:#171717;text-align:center;margin-bottom:96px;padding:0 24px;opacity:0;animation:fadeUp .7s cubic-bezier(.16,1,.3,1) forwards .12s}
+ @media(max-width:480px){
+  h1{
+    font-size: clamp(2rem, 11vw, 2.6rem);
+    white-space: nowrap;
+  }
+}
 
 /* ── BODY COLUMN — 540px, mx-auto, 96px gap ── */
 .body-col{max-width:540px;margin:0 auto;display:flex;flex-direction:column;gap:96px;padding:0 24px}
@@ -4181,8 +4187,8 @@ async function submitForm(e) {
 // ════════════════════════════════════════════
 (function() {
   // Only run on touch devices
-  var isTouch = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (!isTouch) return;
+var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+if (!isTouch) return;
  
   // ── Utility: dispatch a synthetic mouse event ────────────
   function fire(el, type) {

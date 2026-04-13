@@ -7,7 +7,161 @@
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
 <link href="./index_files/css2" rel="stylesheet">
-
+<style id="MOBILE_PATCH_CSS">
+ 
+/* ── MOBILE TAP STATES ─────────────────────── */
+.touch-active .w-notif-text  { color: #C83E4D !important; }
+.touch-active .w-notif-badge { transform: scale(1.3) !important; }
+.touch-active .w-orange      { border-bottom-color: #C83E4D !important; }
+.touch-active .w-circle      { background: #1d4ed8 !important; color: #fff !important; }
+ 
+/* Treadmill popup — JS-toggled on mobile */
+.treadmill-popup.popup-open {
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0) !important;
+  pointer-events: auto !important;
+}
+ 
+/* ── MOBILE FEATURES CAROUSEL ──────────────── */
+@media (max-width: 768px) {
+ 
+  /* Hide the desktop sticky layout */
+  .features-scroll { display: none !important; }
+ 
+  /* Show carousel */
+  .features-carousel {
+    display: block;
+    padding: 0 0 32px;
+  }
+ 
+  .fc-track-wrap {
+    overflow: hidden;
+    position: relative;
+  }
+ 
+  .fc-track {
+    display: flex;
+    transition: transform 0.38s cubic-bezier(.16,1,.3,1);
+    will-change: transform;
+  }
+ 
+  .fc-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    padding: 0 24px 24px;
+    box-sizing: border-box;
+  }
+ 
+  .fc-screenshot {
+    width: 100%;
+    aspect-ratio: 16/10;
+    background: #f8f9fa;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,.10), 0 0 0 1px rgba(0,0,0,.05);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+ 
+  .fc-screenshot svg {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    display: block;
+  }
+ 
+  .fc-text { padding: 0 4px; }
+ 
+  .fc-num {
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: #C83E4D;
+    margin-bottom: 8px;
+  }
+ 
+  .fc-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -.025em;
+    color: #111;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+ 
+  .fc-desc {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+  }
+ 
+  /* Dots */
+  .fc-dots {
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    margin: 16px 0 0;
+    padding: 0 24px;
+    flex-wrap: wrap;
+  }
+ 
+  .fc-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #DDDBDA;
+    transition: background .2s, transform .2s;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+ 
+  .fc-dot.active {
+    background: #C83E4D;
+    transform: scale(1.35);
+  }
+ 
+  /* Arrows */
+  .fc-arrows {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px 0;
+  }
+ 
+  .fc-arrow {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 1px solid #DDDBDA;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #181818;
+    transition: background .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+ 
+  .fc-arrow:active { background: #F3F2F2; }
+  .fc-arrow:disabled { opacity: .3; cursor: default; }
+ 
+  .fc-counter {
+    font-size: .85rem;
+    color: #706E6B;
+    font-family: 'DM Sans', sans-serif;
+  }
+}
+ 
+@media (min-width: 769px) {
+  .features-carousel { display: none !important; }
+}
+ 
+</style>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
@@ -894,7 +1048,32 @@ body.cta-active .w-caretram{
     <div class="features-intro-label">What Caretram does</div>
     <h2 class="features-intro-title">Everything your ABA practice needs,<br>finally in one place.</h2>
   </div>
-
+<div class="features-carousel" id="MOBILE_PATCH_CAROUSEL">
+  <div class="fc-track-wrap" id="fc-track-wrap">
+    <div class="fc-track" id="fc-track">
+      <!-- Slides injected by JS from desktop mockups -->
+    </div>
+  </div>
+  <div class="fc-arrows">
+    <button class="fc-arrow" id="fc-prev" aria-label="Previous">&#8592;</button>
+    <span class="fc-counter" id="fc-counter">1 / 12</span>
+    <button class="fc-arrow" id="fc-next" aria-label="Next">&#8594;</button>
+  </div>
+  <div class="fc-dots" id="fc-dots">
+    <button class="fc-dot active" data-dot="0"></button>
+    <button class="fc-dot" data-dot="1"></button>
+    <button class="fc-dot" data-dot="2"></button>
+    <button class="fc-dot" data-dot="3"></button>
+    <button class="fc-dot" data-dot="4"></button>
+    <button class="fc-dot" data-dot="5"></button>
+    <button class="fc-dot" data-dot="6"></button>
+    <button class="fc-dot" data-dot="7"></button>
+    <button class="fc-dot" data-dot="8"></button>
+    <button class="fc-dot" data-dot="9"></button>
+    <button class="fc-dot" data-dot="10"></button>
+    <button class="fc-dot" data-dot="11"></button>
+  </div>
+</div>
   <div class="features-scroll">
     <div class="features-screen-col">
       <div class="feature-mockup-wrap" id="feature-mockup-wrap">
@@ -3868,7 +4047,287 @@ async function submitForm(e) {
     }, 500);
   }
 }
-</script><div id="nothing-ghost"></div>
+</script>
+   <script id="MOBILE_PATCH_JS">
+ 
+// ════════════════════════════════════════════
+// MOBILE FEATURES CAROUSEL
+// ════════════════════════════════════════════
+(function() {
+  // Feature metadata matching the desktop order
+  var FEATURES = [
+    {num:"01",name:"Contact Hub",desc:"Email, SMS, and phone calls — all in one timeline. Reach clients via any medium and see every conversation in one place without switching tools."},
+    {num:"02",name:"Document Portal",desc:"Send families a secure link to upload exactly what you need. No email chasing, manual record attaching, or tedious follow-up calls."},
+    {num:"03",name:"Business Automations",desc:"From referral to discharge, eliminate the repetitive tasks that slow your team down. Build once, run forever."},
+    {num:"04",name:"Verification of Benefits",desc:"Instantly verify insurance eligibility in real time — no phone calls, no waiting. One click or fully automatic VOB."},
+    {num:"05",name:"E-Signature",desc:"Send and manage legally binding e-signature requests without ever leaving your workflow — fully compliant and paperless."},
+    {num:"06",name:"AI Document Service",desc:"AI workflows identify whether an uploaded document is correct and extract data automatically. Upload insurance card → extract member ID → run VOB."},
+    {num:"07",name:"AI Chatbot",desc:"A 24/7 intake assistant that answers questions, captures leads, and keeps families moving forward — even after hours."},
+    {num:"08",name:"Managed Forms",desc:"Intelligent, dynamic forms built for ABA — from intake to questionnaires, with all data staying on platform."},
+    {num:"09",name:"Payments Module",desc:"Collect copays, generate invoices and receipts, and reconcile revenue. Save, charge, void, and refund right from Caretram."},
+    {num:"10",name:"Staffing Module",desc:"Streamline hiring, credentialing, and scheduling so you can focus on growing your team, not managing spreadsheets."},
+    {num:"11",name:"RBT Geo Distance",desc:"Automatically match clients with the nearest RBT, cutting travel time and maximizing billable hours."},
+    {num:"12",name:"CentralReach Integration",desc:"When a client is ready, Caretram pushes their complete record directly into CentralReach automatically. No double data entry."},
+  ];
+ 
+  function initCarousel() {
+    if (window.innerWidth > 768) return;
+ 
+    var track    = document.getElementById('fc-track');
+    var wrap     = document.getElementById('fc-track-wrap');
+    var counter  = document.getElementById('fc-counter');
+    var prevBtn  = document.getElementById('fc-prev');
+    var nextBtn  = document.getElementById('fc-next');
+    var dotsEl   = document.getElementById('fc-dots');
+    if (!track || !wrap) return;
+ 
+    var dots    = dotsEl ? Array.from(dotsEl.querySelectorAll('.fc-dot')) : [];
+    var mockups = Array.from(document.querySelectorAll('.feature-mockup'));
+    var TOTAL   = FEATURES.length;
+    var current = 0;
+ 
+    // Build slides
+    track.innerHTML = '';
+    FEATURES.forEach(function(f, i) {
+      var slide = document.createElement('div');
+      slide.className = 'fc-slide';
+      slide.setAttribute('data-slide', i);
+ 
+      var screenshotEl = document.createElement('div');
+      screenshotEl.className = 'fc-screenshot';
+      // Copy SVG from desktop mockup
+      var src = mockups[i];
+      if (src) {
+        var svgWrap = src.querySelector('.feature-svg-wrap');
+        screenshotEl.innerHTML = svgWrap ? svgWrap.innerHTML : src.innerHTML;
+      }
+ 
+      var textEl = document.createElement('div');
+      textEl.className = 'fc-text';
+      textEl.innerHTML =
+        '<div class="fc-num">' + f.num + '</div>' +
+        '<div class="fc-name">' + f.name + '</div>' +
+        '<div class="fc-desc">' + f.desc + '</div>';
+ 
+      slide.appendChild(screenshotEl);
+      slide.appendChild(textEl);
+      track.appendChild(slide);
+    });
+ 
+    counter.textContent = '1 / ' + TOTAL;
+ 
+    function goTo(n) {
+      current = Math.max(0, Math.min(TOTAL - 1, n));
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      counter.textContent = (current + 1) + ' / ' + TOTAL;
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === TOTAL - 1;
+      dots.forEach(function(d, i) { d.classList.toggle('active', i === current); });
+    }
+ 
+    prevBtn.addEventListener('click', function() { goTo(current - 1); });
+    nextBtn.addEventListener('click', function() { goTo(current + 1); });
+    dots.forEach(function(d, i) { d.addEventListener('click', function() { goTo(i); }); });
+ 
+    // Touch swipe
+    var startX = 0, startY = 0, isDragging = false, hasMoved = false;
+ 
+    wrap.addEventListener('touchstart', function(e) {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      isDragging = true; hasMoved = false;
+    }, { passive: true });
+ 
+    wrap.addEventListener('touchmove', function(e) {
+      if (!isDragging) return;
+      var dx = e.touches[0].clientX - startX;
+      var dy = e.touches[0].clientY - startY;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 8) {
+        hasMoved = true;
+        e.preventDefault();
+        var base = -(current * 100);
+        var pct  = base + (dx / wrap.offsetWidth) * 100;
+        track.style.transition = 'none';
+        track.style.transform  = 'translateX(' + pct + '%)';
+      }
+    }, { passive: false });
+ 
+    wrap.addEventListener('touchend', function(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      track.style.transition = '';
+      var dx = e.changedTouches[0].clientX - startX;
+      if (hasMoved && Math.abs(dx) > 44) {
+        goTo(dx < 0 ? current + 1 : current - 1);
+      } else {
+        goTo(current);
+      }
+    });
+ 
+    goTo(0);
+  }
+ 
+  // Init on DOMContentLoaded (or immediately if already loaded)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCarousel);
+  } else {
+    initCarousel();
+  }
+})();
+ 
+ 
+// ════════════════════════════════════════════
+// MOBILE TAP-TO-TOGGLE FOR INTERACTIVE WORDS
+// ════════════════════════════════════════════
+(function() {
+  // Only run on touch devices
+  var isTouch = !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (!isTouch) return;
+ 
+  // ── Utility: dispatch a synthetic mouse event ────────────
+  function fire(el, type) {
+    el.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true }));
+  }
+ 
+  // ── Generic tap-toggle using mouseenter/leave ────────────
+  function tapViaMouseEvents(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var active = false;
+    el.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      active = !active;
+      fire(el, active ? 'mouseenter' : 'mouseleave');
+    }, { passive: false });
+    return el;
+  }
+ 
+  // ── Notifications ────────────────────────────────────────
+  // The notif engine uses its own hover listeners already.
+  // We supplement with touchstart → synthetic mouseenter/leave.
+  tapViaMouseEvents('notif-trigger');
+ 
+  // ── Tag with your prospects (phone popup) ───────────────
+  (function() {
+    var trigger = document.getElementById('prospects-trigger');
+    var overlay = document.getElementById('phone-overlay');
+    if (!trigger || !overlay) return;
+ 
+    var cards = document.querySelectorAll('#phone-notifs .pn');
+    var pActive = false;
+    var popTimers = [];
+ 
+    function openPhone() {
+      overlay.style.display = 'block';
+      // Position it: horizontally centered on trigger, above it
+      var rect = trigger.getBoundingClientRect();
+      var W = 220;
+      var left = rect.left + rect.width / 2 - W / 2;
+      left = Math.max(8, Math.min(left, window.innerWidth - W - 8));
+      // Use fixed positioning so it sits on screen
+      overlay.style.position = 'fixed';
+      overlay.style.left  = left + 'px';
+      overlay.style.top   = Math.max(8, rect.top - overlay.offsetHeight - 14) + 'px';
+      overlay.style.zIndex = 9999;
+      // Force reflow before animating
+      overlay.getBoundingClientRect();
+      overlay.style.opacity = '1';
+      overlay.style.transform = 'translateY(0)';
+      // Animate cards in
+      cards.forEach(function(c, i) {
+        popTimers.push(setTimeout(function() { c.classList.add('in'); }, 80 + i * 130));
+      });
+    }
+ 
+    function closePhone() {
+      overlay.style.opacity = '0';
+      overlay.style.transform = 'translateY(8px)';
+      setTimeout(function() { overlay.style.display = 'none'; }, 280);
+      popTimers.forEach(clearTimeout); popTimers = [];
+      setTimeout(function() { cards.forEach(function(c) { c.classList.remove('in'); }); }, 50);
+    }
+ 
+    trigger.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      pActive = !pActive;
+      trigger.classList.toggle('touch-active', pActive);
+      pActive ? openPhone() : closePhone();
+    }, { passive: false });
+  })();
+ 
+  // ── Babysitting task list ─────────────────────────────────
+  // The babysit engine is a self-contained closure triggered by
+  // mouseenter/mouseleave on #babysit-trigger — tap-toggle it.
+  tapViaMouseEvents('babysit-trigger');
+ 
+  // ── Treadmill "you" popup ─────────────────────────────────
+  (function() {
+    var trigger = document.getElementById('you-trigger');
+    if (!trigger) return;
+    var popup = trigger.querySelector('.treadmill-popup');
+    var open = false;
+    trigger.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      open = !open;
+      if (popup) popup.classList.toggle('popup-open', open);
+    }, { passive: false });
+  })();
+ 
+  // ── Digital paper-pushing / airplane ─────────────────────
+  tapViaMouseEvents('paper-trigger');
+ 
+  // ── Roadblocks blackout ───────────────────────────────────
+  (function() {
+    var trigger = document.getElementById('roadblock-trigger');
+    if (!trigger) return;
+    var rbActive = false;
+    trigger.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      rbActive = !rbActive;
+      document.body.classList.toggle('roadblock-active', rbActive);
+    }, { passive: false });
+  })();
+ 
+  // ── "nothing" melt ────────────────────────────────────────
+  tapViaMouseEvents('nothing-trigger');
+ 
+  // ── Caretram hearts ───────────────────────────────────────
+  tapViaMouseEvents('caretram-trigger');
+ 
+  // ── Global tap-outside dismissal ─────────────────────────
+  document.addEventListener('touchstart', function(e) {
+    var interactorIds = [
+      'notif-trigger','prospects-trigger','babysit-trigger',
+      'you-trigger','paper-trigger','roadblock-trigger',
+      'nothing-trigger','caretram-trigger'
+    ];
+ 
+    var clickedInteractor = interactorIds.some(function(id) {
+      var el = document.getElementById(id);
+      return el && (el === e.target || el.contains(e.target));
+    });
+ 
+    if (!clickedInteractor) {
+      // Close all active touch states
+      document.querySelectorAll('.touch-active').forEach(function(el) {
+        el.classList.remove('touch-active');
+        fire(el, 'mouseleave');
+      });
+ 
+      // Close treadmill popup
+      var popup = document.querySelector('.treadmill-popup.popup-open');
+      if (popup) popup.classList.remove('popup-open');
+ 
+      // Dismiss roadblock
+      document.body.classList.remove('roadblock-active');
+    }
+  }, { passive: true });
+ 
+})();
+ 
+</script>
+ 
+   <div id="nothing-ghost"></div>
 
 
 </body></html>
